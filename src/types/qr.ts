@@ -1,4 +1,4 @@
-export type QRType = 'url' | 'text' | 'wifi' | 'vcard' | 'email' | 'phone' | 'sms';
+export type QRType = 'url' | 'text' | 'wifi' | 'vcard' | 'email' | 'phone' | 'sms' | 'whatsapp' | 'upi';
 
 export type ErrorCorrectionLevel = 'L' | 'M' | 'Q' | 'H';
 
@@ -30,6 +30,18 @@ export interface SMSData {
   message: string;
 }
 
+export interface WhatsAppData {
+  phone: string;
+  message: string;
+}
+
+export interface UPIData {
+  upiId: string;
+  name: string;
+  amount: string;
+  note: string;
+}
+
 export interface QRCodeData {
   type: QRType;
   url?: string;
@@ -39,6 +51,8 @@ export interface QRCodeData {
   email?: EmailData;
   phone?: string;
   sms?: SMSData;
+  whatsapp?: WhatsAppData;
+  upi?: UPIData;
 }
 
 export interface QRCodeOptions {

@@ -2,15 +2,17 @@ import { useState, useRef, useCallback } from 'react';
 import {
   Globe, Type, Wifi, IdCard, Mail, Phone, MessageSquare,
   Upload, X, Download, Copy, Check, AlertCircle,
-  Shield, Palette, Zap, QrCode
+  Shield, Palette, Zap, QrCode, MessageCircle, IndianRupee
 } from 'lucide-react';
 import { useQRGenerator } from '@/hooks/useQRGenerator';
-import type { QRType, ErrorCorrectionLevel, WiFiData, VCardData, EmailData, SMSData } from '@/types/qr';
+import type { QRType, ErrorCorrectionLevel, WiFiData, VCardData, EmailData, SMSData, WhatsAppData, UPIData } from '@/types/qr';
 
 const qrTypes: { type: QRType; label: string; icon: React.ReactNode; placeholder: string }[] = [
   { type: 'url', label: 'URL', icon: <Globe className="w-4 h-4" />, placeholder: 'https://example.com' },
   { type: 'text', label: 'Text', icon: <Type className="w-4 h-4" />, placeholder: 'Enter any text...' },
   { type: 'wifi', label: 'WiFi', icon: <Wifi className="w-4 h-4" />, placeholder: '' },
+  { type: 'whatsapp', label: 'WhatsApp', icon: <MessageCircle className="w-4 h-4" />, placeholder: '' },
+  { type: 'upi', label: 'UPI', icon: <IndianRupee className="w-4 h-4" />, placeholder: '' },
   { type: 'vcard', label: 'vCard', icon: <IdCard className="w-4 h-4" />, placeholder: '' },
   { type: 'email', label: 'Email', icon: <Mail className="w-4 h-4" />, placeholder: '' },
   { type: 'phone', label: 'Phone', icon: <Phone className="w-4 h-4" />, placeholder: '+1 (555) 123-4567' },
@@ -57,6 +59,22 @@ function getSMSData(qrData: { sms?: SMSData }): SMSData {
   return {
     phone: qrData.sms?.phone ?? '',
     message: qrData.sms?.message ?? '',
+  };
+}
+
+function getWhatsAppData(qrData: { whatsapp?: WhatsAppData }): WhatsAppData {
+  return {
+    phone: qrData.whatsapp?.phone ?? '',
+    message: qrData.whatsapp?.message ?? '',
+  };
+}
+
+function getUPIData(qrData: { upi?: UPIData }): UPIData {
+  return {
+    upiId: qrData.upi?.upiId ?? '',
+    name: qrData.upi?.name ?? '',
+    amount: qrData.upi?.amount ?? '',
+    note: qrData.upi?.note ?? '',
   };
 }
 
@@ -397,6 +415,90 @@ export default function Generator() {
                       className="input-dark w-full px-4 py-3 text-sm resize-none"
                     />
                   </div>
+                </div>
+              )}
+
+              {/* WhatsApp */}
+              {qrType === 'whatsapp' && (
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-medium text-[#f0f0f0]/50 mb-1.5">WhatsApp Number</label>
+                    <div className="relative">
+                      <MessageCircle className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#f0f0f0]/30" />
+                      <input
+                        type="tel"
+                        value={getWhatsAppData(qrData).phone}
+                        onChange={e => updateQRData('whatsapp', { whatsapp: { ...getWhatsAppData(qrData), phone: e.target.value } })}
+                        placeholder="+91 98765 43210 (with country code)"
+                        className="input-dark w-full pl-10 pr-4 py-3 text-sm"
+                      />
+                    </div>
+                    <p className="mt-1 text-[10px] text-[#f0f0f0]/30">Include country code, e.g. +91 for India</p>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-[#f0f0f0]/50 mb-1.5">Pre-filled Message (optional)</label>
+                    <textarea
+                      value={getWhatsAppData(qrData).message}
+                      onChange={e => updateQRData('whatsapp', { whatsapp: { ...getWhatsAppData(qrData), message: e.target.value } })}
+                      placeholder="Hello! I'd like to know more..."
+                      rows={3}
+                      className="input-dark w-full px-4 py-3 text-sm resize-none"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* UPI */}
+              {qrType === 'upi' && (
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-medium text-[#f0f0f0]/50 mb-1.5">UPI ID</label>
+                    <div className="relative">
+                      <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#f0f0f0]/30" />
+                      <input
+                        type="text"
+                        value={getUPIData(qrData).upiId}
+                        onChange={e => updateQRData('upi', { upi: { ...getUPIData(qrData), upiId: e.target.value } })}
+                        placeholder="yourname@upi"
+                        className="input-dark w-full pl-10 pr-4 py-3 text-sm"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-[#f0f0f0]/50 mb-1.5">Payee Name</label>
+                    <input
+                      type="text"
+                      value={getUPIData(qrData).name}
+                      onChange={e => updateQRData('upi', { upi: { ...getUPIData(qrData), name: e.target.value } })}
+                      placeholder="Your Business Name"
+                      className="input-dark w-full px-4 py-3 text-sm"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-[#f0f0f0]/50 mb-1.5">Amount (₹) <span className="opacity-50">optional</span></label>
+                      <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={getUPIData(qrData).amount}
+                        onChange={e => updateQRData('upi', { upi: { ...getUPIData(qrData), amount: e.target.value } })}
+                        placeholder="0.00"
+                        className="input-dark w-full px-4 py-3 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-[#f0f0f0]/50 mb-1.5">Note <span className="opacity-50">optional</span></label>
+                      <input
+                        type="text"
+                        value={getUPIData(qrData).note}
+                        onChange={e => updateQRData('upi', { upi: { ...getUPIData(qrData), note: e.target.value } })}
+                        placeholder="Payment note"
+                        className="input-dark w-full px-4 py-3 text-sm"
+                      />
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-[#f0f0f0]/30">Works with GPay, PhonePe, Paytm, and all UPI apps</p>
                 </div>
               )}
             </div>

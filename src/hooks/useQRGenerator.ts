@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import QRCode from 'qrcode';
-import type { QRType, QRCodeData, QRCodeOptions, WiFiData, VCardData, EmailData, SMSData } from '@/types/qr';
+import type { QRType, QRCodeData, QRCodeOptions, WiFiData, VCardData, EmailData, SMSData, WhatsAppData, UPIData } from '@/types/qr';
 
 function buildQRContent(data: QRCodeData): string {
   switch (data.type) {
@@ -26,6 +26,22 @@ function buildQRContent(data: QRCodeData): string {
     case 'sms': {
       const s = data.sms || {} as SMSData;
       return `sms:${s.phone || ''}?body=${encodeURIComponent(s.message || '')}`;
+    }
+    case 'whatsapp': {
+      const w = data.whatsapp || {} as WhatsAppData;
+      const phone = (w.phone || '').replace(/[^0-9]/g, '');
+      const msg = w.message ? `?text=${encodeURIComponent(w.message)}` : '';
+      return `https://wa.me/${phone}${msg}`;
+    }
+    case 'upi': {
+      const u = data.upi || {} as UPIData;
+      const params = new URLSearchParams();
+      if (u.upiId) params.set('pa', u.upiId);
+      if (u.name) params.set('pn', u.name);
+      if (u.amount) params.set('am', u.amount);
+      params.set('cu', 'INR');
+      if (u.note) params.set('tn', u.note);
+      return `upi://pay?${params.toString()}`;
     }
     default:
       return '';
