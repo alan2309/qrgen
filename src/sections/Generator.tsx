@@ -2,7 +2,8 @@ import { useState, useRef, useCallback } from 'react';
 import {
   Globe, Type, Wifi, IdCard, Mail, Phone, MessageSquare,
   Upload, X, Download, Copy, Check, AlertCircle,
-  Shield, Palette, Zap, QrCode, MessageCircle, IndianRupee
+  Shield, Palette, Zap, QrCode, MessageCircle, IndianRupee,
+  Maximize2
 } from 'lucide-react';
 import { useQRGenerator } from '@/hooks/useQRGenerator';
 import type { QRType, ErrorCorrectionLevel, WiFiData, VCardData, EmailData, SMSData, WhatsAppData, UPIData } from '@/types/qr';
@@ -84,6 +85,7 @@ export default function Generator() {
     dataUrl, downloadPNG, downloadSVG, downloadPDF,
   } = useQRGenerator();
   const [copied, setCopied] = useState(false);
+  const [isZoomed, setIsZoomed] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleTypeChange = (type: QRType) => {
@@ -111,18 +113,24 @@ export default function Generator() {
   const copyQRLink = async () => {
     if (!dataUrl) return;
     try {
-      await navigator.clipboard.writeText(dataUrl);
+      const response = await fetch(dataUrl);
+      const blob = await response.blob();
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          [blob.type]: blob
+        })
+      ]);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      const input = document.createElement('input');
-      input.value = dataUrl;
-      document.body.appendChild(input);
-      input.select();
-      document.execCommand('copy');
-      document.body.removeChild(input);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      // Fallback: copy the data URL as text
+      try {
+        await navigator.clipboard.writeText(dataUrl);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch {
+        alert('Unable to copy. Please right-click and save the image.');
+      }
     }
   };
 
@@ -130,7 +138,7 @@ export default function Generator() {
 
   return (
     <section id="generate" className="py-20 scroll-mt-20">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <div className="text-center mb-10">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#f0f0f0]">
@@ -141,7 +149,7 @@ export default function Generator() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-[1fr_auto_1fr] gap-6 items-start">
+        <div className="grid lg:grid-cols-[1fr_auto_1fr] gap-8 items-start">
           {/* Left Panel - Inputs */}
           <div className="card-glass rounded-2xl p-4 sm:p-6">
             {/* QR Type Tabs */}
@@ -150,11 +158,10 @@ export default function Generator() {
                 <button
                   key={t.type}
                   onClick={() => handleTypeChange(t.type)}
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 flex-shrink-0 ${
-                    qrType === t.type
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 flex-shrink-0 ${qrType === t.type
                       ? 'bg-[#4d6bfa] text-white'
                       : 'bg-white/5 text-[#f0f0f0]/60 hover:bg-white/10 hover:text-[#f0f0f0]/80'
-                  }`}
+                    }`}
                 >
                   {t.icon}
                   {t.label}
@@ -564,11 +571,10 @@ export default function Generator() {
                     <button
                       key={level.value}
                       onClick={() => updateOptions({ errorCorrectionLevel: level.value })}
-                      className={`px-2 py-2 rounded-lg text-xs font-medium transition-all ${
-                        options.errorCorrectionLevel === level.value
+                      className={`px-2 py-2 rounded-lg text-xs font-medium transition-all ${options.errorCorrectionLevel === level.value
                           ? 'bg-[#4d6bfa] text-white'
                           : 'bg-white/5 text-[#f0f0f0]/50 hover:bg-white/10'
-                      }`}
+                        }`}
                     >
                       <div>{level.label}</div>
                       <div className="text-[10px] opacity-60">{level.desc}</div>
@@ -615,23 +621,37 @@ export default function Generator() {
             </div>
           </div>
 
-          {/* Right Panel - Preview & Download */}
+          {/* Right Panel - Preview & Download - ENHANCED */}
           <div className="space-y-4">
-            {/* QR Preview */}
-            <div className="card-glass rounded-2xl p-6 sm:p-8 flex flex-col items-center">
-              <div className="relative w-full max-w-[280px] aspect-square">
+            {/* QR Preview - With zoom capability */}
+            <div className="card-glass rounded-2xl p-6 sm:p-8 flex flex-col items-center relative">
+              {/* Zoom button */}
+              {dataUrl && (
+                <button
+                  onClick={() => setIsZoomed(!isZoomed)}
+                  className="absolute top-4 right-4 p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors z-10"
+                  title="Zoom in/out"
+                >
+                  <Maximize2 className="w-4 h-4 text-[#f0f0f0]/50" />
+                </button>
+              )}
+
+              <div className={`relative w-full max-w-[400px] aspect-square mx-auto transition-all duration-300 ${isZoomed ? 'scale-110' : 'scale-100'
+                }`}>
                 {dataUrl ? (
-                  <div className="w-full h-full animate-pulse-glow rounded-xl overflow-hidden">
+                  <div className="w-full h-full rounded-xl overflow-hidden bg-white p-6 shadow-2xl shadow-[#4d6bfa]/20 border border-white/10">
                     <img
                       src={dataUrl}
                       alt={`Generated ${qrType} QR code`}
                       className="w-full h-full object-contain"
                     />
+                    {/* Subtle glow effect */}
+                    <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-[#4d6bfa]/5 to-transparent pointer-events-none" />
                   </div>
                 ) : (
-                  <div className="w-full h-full rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
+                  <div className="w-full h-full rounded-xl bg-white/5 flex items-center justify-center border-2 border-dashed border-white/10">
                     <div className="text-center">
-                      <QrCode className="w-16 h-16 text-[#f0f0f0]/15 mx-auto mb-3" />
+                      <QrCode className="w-24 h-24 text-[#f0f0f0]/15 mx-auto mb-3" />
                       <p className="text-sm text-[#f0f0f0]/30">
                         {qrType === 'url' ? 'Enter a URL to generate' : `Enter ${qrType} details`}
                       </p>
@@ -650,21 +670,39 @@ export default function Generator() {
                 )}
               </div>
 
-              {/* Type indicator */}
-              {dataUrl && (
-                <div className="mt-4 flex items-center gap-2 text-xs text-[#f0f0f0]/40">
-                  <Zap className="w-3 h-3 text-[#4d6bfa]" />
-                  <span>{qrType.toUpperCase()} QR Code</span>
+              {/* Status badges - Improved */}
+              {dataUrl ? (
+                <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs">
+                  <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#4d6bfa]/10 text-[#4d6bfa] border border-[#4d6bfa]/20">
+                    <Zap className="w-3 h-3" />
+                    {qrType.toUpperCase()}
+                  </span>
+                  <span className="px-3 py-1 rounded-full bg-white/5 text-[#f0f0f0]/50 border border-white/5">
+                    Error: {options.errorCorrectionLevel}
+                  </span>
+                  {options.logo && (
+                    <span className="px-3 py-1 rounded-full bg-green-500/10 text-green-400 border border-green-500/20">
+                      ✓ Logo
+                    </span>
+                  )}
+                  <span className="px-3 py-1 rounded-full bg-white/5 text-[#f0f0f0]/40 border border-white/5">
+                    {dataUrl.length > 100 ? `${(dataUrl.length / 1024).toFixed(1)}KB` : `${dataUrl.length}B`}
+                  </span>
+                </div>
+              ) : (
+                <div className="mt-4 flex items-center gap-2 text-xs text-[#f0f0f0]/30">
+                  <AlertCircle className="w-3 h-3" />
+                  <span>Fill in the details to generate</span>
                 </div>
               )}
             </div>
 
-            {/* Download Buttons */}
-            <div className="grid grid-cols-3 gap-2">
+            {/* Download Buttons - Enhanced */}
+            <div className="grid grid-cols-3 gap-2.5">
               <button
                 onClick={downloadPNG}
                 disabled={!dataUrl}
-                className="btn-primary py-3 text-sm flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="btn-primary py-3.5 text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 hover:shadow-lg hover:shadow-[#4d6bfa]/20 transition-all duration-200"
               >
                 <Download className="w-4 h-4" />
                 PNG
@@ -672,7 +710,7 @@ export default function Generator() {
               <button
                 onClick={downloadSVG}
                 disabled={!dataUrl}
-                className="btn-primary py-3 text-sm flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="btn-primary py-3.5 text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 hover:shadow-lg hover:shadow-[#4d6bfa]/20 transition-all duration-200"
               >
                 <Download className="w-4 h-4" />
                 SVG
@@ -680,27 +718,68 @@ export default function Generator() {
               <button
                 onClick={downloadPDF}
                 disabled={!dataUrl}
-                className="btn-primary py-3 text-sm flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="btn-primary py-3.5 text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 hover:shadow-lg hover:shadow-[#4d6bfa]/20 transition-all duration-200"
               >
                 <Download className="w-4 h-4" />
                 PDF
               </button>
             </div>
 
-            {/* Share/Copy */}
+            {/* Share/Copy - Enhanced with better feedback */}
             <div className="flex gap-2">
               <button
                 onClick={copyQRLink}
                 disabled={!dataUrl}
-                className="btn-secondary flex-1 py-2.5 text-sm flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="btn-secondary flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-white/10 transition-all duration-200"
               >
-                {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
-                {copied ? 'Copied!' : 'Copy Image'}
+                {copied ? (
+                  <>
+                    <Check className="w-4 h-4 text-green-400" />
+                    Copied!
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4" />
+                    Copy Image
+                  </>
+                )}
               </button>
             </div>
+
+            {/* Quick share hint with better styling */}
+            {dataUrl && (
+              <div className="text-center space-y-1">
+                <p className="text-[10px] text-[#f0f0f0]/20">
+                  Right-click the QR code to save directly
+                </p>
+                <p className="text-[9px] text-[#f0f0f0]/10">
+                  {qrType} • {options.foregroundColor} on {options.backgroundColor}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
+
+      {/* Add animation keyframes */}
+      <style>{`
+        @keyframes scan-line {
+          0% {
+            top: -2px;
+            opacity: 0;
+          }
+          10% {
+            opacity: 1;
+          }
+          90% {
+            opacity: 1;
+          }
+          100% {
+            top: 100%;
+            opacity: 0;
+          }
+        }
+      `}</style>
     </section>
   );
 }
