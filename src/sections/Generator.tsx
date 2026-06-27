@@ -149,9 +149,9 @@ export default function Generator() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-[1fr_auto_1fr] gap-8 items-start">
+        <div className="grid md:grid-cols-2 lg:grid-cols-[1fr_auto_1fr] gap-8 items-start">
           {/* Left Panel - Inputs */}
-          <div className="card-glass rounded-2xl p-4 sm:p-6">
+          <div className="card-glass rounded-2xl p-4 sm:p-6 min-w-0">
             {/* QR Type Tabs */}
             <div className="flex gap-1.5 overflow-x-auto tab-scroll pb-2 mb-5">
               {qrTypes.map(t => (
@@ -566,7 +566,7 @@ export default function Generator() {
                     </span>
                   </span>
                 </label>
-                <div className="grid grid-cols-4 gap-1.5">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
                   {errorLevels.map(level => (
                     <button
                       key={level.value}
@@ -622,7 +622,7 @@ export default function Generator() {
           </div>
 
           {/* Right Panel - Preview & Download - ENHANCED */}
-          <div className="space-y-4">
+          <div className="space-y-4 w-full min-w-0">
             {/* QR Preview - With zoom capability */}
             <div className="card-glass rounded-2xl p-6 sm:p-8 flex flex-col items-center relative">
               {/* Zoom button */}

@@ -31,9 +31,9 @@ export default function Footer() {
   return (
     <footer className="bg-[#050508] border-t border-white/5">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           {/* Brand */}
-          <div className="col-span-2 md:col-span-1">
+          <div className="sm:col-span-2 md:col-span-1">
             <div className="flex items-center gap-2.5 mb-3">
               <QrCode className="w-5 h-5 text-[#4d6bfa]" />
               <span className="text-[#f0f0f0] font-bold text-base">QR Nexus</span>
