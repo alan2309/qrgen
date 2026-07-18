@@ -36,7 +36,7 @@ export default function Header() {
         {/* Logo */}
         <a href="#" className="flex items-center gap-2.5" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
           <QrCode className="w-6 h-6 text-[#4d6bfa]" />
-          <span className="text-[#f0f0f0] font-bold text-lg">QR Nexus</span>
+          <span className="text-[#f0f0f0] font-bold text-lg">QRGen by Adwyzors</span>
         </a>
 
         {/* Desktop Nav */}

@@ -36,7 +36,7 @@ export default function Footer() {
           <div className="sm:col-span-2 md:col-span-1">
             <div className="flex items-center gap-2.5 mb-3">
               <QrCode className="w-5 h-5 text-[#4d6bfa]" />
-              <span className="text-[#f0f0f0] font-bold text-base">QR Nexus</span>
+              <span className="text-[#f0f0f0] font-bold text-base">QRGen by Adwyzors</span>
             </div>
             <p className="text-sm text-[#f0f0f0]/40 mb-4 max-w-[240px]">
               The free, private QR code generator trusted by thousands.
@@ -118,7 +118,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-10 pt-6 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-2">
           <p className="text-xs text-[#f0f0f0]/30">
-            QR Nexus. All rights reserved.
+            QRGen by Adwyzors. All rights reserved.
           </p>
           <p className="text-xs text-[#f0f0f0]/30">
             Free QR Code Generator

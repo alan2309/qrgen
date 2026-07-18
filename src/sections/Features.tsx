@@ -29,7 +29,7 @@ const features = [
   {
     icon: <UserCheck className="w-6 h-6 text-[#4d6bfa]" />,
     title: 'No Signup Required',
-    description: 'Use QR Nexus immediately without creating an account. No emails, no passwords, no hassle.',
+    description: 'Use QRGen by Adwyzors immediately without creating an account. No emails, no passwords, no hassle.',
   },
 ];
 
@@ -39,7 +39,7 @@ export default function Features() {
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#f0f0f0]">
-            Why Choose QR Nexus?
+            Why Choose QRGen by Adwyzors?
           </h2>
           <p className="mt-3 text-sm sm:text-base text-[#f0f0f0]/50 max-w-xl mx-auto">
             The most trusted free QR code generator with everything you need.

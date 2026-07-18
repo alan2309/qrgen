@@ -9,7 +9,7 @@ export default function Privacy() {
         <div className="max-w-[800px] mx-auto px-4 sm:px-6 h-16 flex items-center">
           <Link to="/" className="flex items-center gap-2.5">
             <QrCode className="w-5 h-5 text-[#4d6bfa]" />
-            <span className="text-[#f0f0f0] font-bold text-base">QR Nexus</span>
+            <span className="text-[#f0f0f0] font-bold text-base">QRGen by Adwyzors</span>
           </Link>
         </div>
       </header>
@@ -29,7 +29,7 @@ export default function Privacy() {
 
         <div className="prose prose-invert max-w-none">
           <p className="text-[#f0f0f0]/70 text-sm sm:text-base leading-relaxed mb-6">
-            QR Nexus respects your privacy. This policy explains how we handle your data.
+            QRGen by Adwyzors respects your privacy. This policy explains how we handle your data.
             Last updated: June 2026.
           </p>
 
@@ -71,8 +71,8 @@ export default function Privacy() {
             <h2 className="text-lg font-semibold text-[#f0f0f0] mb-3">Contact</h2>
             <p className="text-[#f0f0f0]/60 text-sm leading-relaxed">
               For privacy questions or concerns, please contact us at{' '}
-              <a href="mailto:privacy@qrnexus.app" className="text-[#4d6bfa] hover:underline">
-                privacy@qrnexus.app
+              <a href="mailto:privacy@qrgen.app" className="text-[#4d6bfa] hover:underline">
+                privacy@qrgen.app
               </a>
             </p>
           </section>
@@ -82,7 +82,7 @@ export default function Privacy() {
       {/* Footer */}
       <footer className="border-t border-white/5 py-6">
         <div className="max-w-[800px] mx-auto px-4 sm:px-6 flex justify-between items-center">
-          <p className="text-xs text-[#f0f0f0]/30">QR Nexus. All rights reserved.</p>
+          <p className="text-xs text-[#f0f0f0]/30">QRGen by Adwyzors. All rights reserved.</p>
           <Link to="/" className="text-xs text-[#4d6bfa] hover:underline">Back to Generator</Link>
         </div>
       </footer>

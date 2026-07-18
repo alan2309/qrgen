@@ -9,7 +9,7 @@ export default function Terms() {
         <div className="max-w-[800px] mx-auto px-4 sm:px-6 h-16 flex items-center">
           <Link to="/" className="flex items-center gap-2.5">
             <QrCode className="w-5 h-5 text-[#4d6bfa]" />
-            <span className="text-[#f0f0f0] font-bold text-base">QR Nexus</span>
+            <span className="text-[#f0f0f0] font-bold text-base">QRGen by Adwyzors</span>
           </Link>
         </div>
       </header>
@@ -29,13 +29,13 @@ export default function Terms() {
 
         <div className="prose prose-invert max-w-none">
           <p className="text-[#f0f0f0]/70 text-sm sm:text-base leading-relaxed mb-6">
-            By using QR Nexus, you agree to these terms. Last updated: June 2026.
+            By using QRGen by Adwyzors, you agree to these terms. Last updated: June 2026.
           </p>
 
           <section className="mb-8">
             <h2 className="text-lg font-semibold text-[#f0f0f0] mb-3">Acceptable Use</h2>
             <p className="text-[#f0f0f0]/60 text-sm leading-relaxed">
-              You may use QR Nexus to generate QR codes for any lawful purpose. You may not use this service
+              You may use QRGen by Adwyzors to generate QR codes for any lawful purpose. You may not use this service
               to create QR codes that link to malicious content, phishing sites, malware, illegal content,
               or any material that violates applicable laws or regulations.
             </p>
@@ -44,7 +44,7 @@ export default function Terms() {
           <section className="mb-8">
             <h2 className="text-lg font-semibold text-[#f0f0f0] mb-3">Disclaimer</h2>
             <p className="text-[#f0f0f0]/60 text-sm leading-relaxed">
-              QR Nexus is provided &quot;as is&quot; without any warranties, express or implied. We do not guarantee
+              QRGen by Adwyzors is provided &quot;as is&quot; without any warranties, express or implied. We do not guarantee
               that the service will be uninterrupted, error-free, or that QR codes will be scannable in all
               conditions. You are responsible for testing your QR codes before publishing or printing.
             </p>
@@ -53,7 +53,7 @@ export default function Terms() {
           <section className="mb-8">
             <h2 className="text-lg font-semibold text-[#f0f0f0] mb-3">Limitation of Liability</h2>
             <p className="text-[#f0f0f0]/60 text-sm leading-relaxed">
-              To the maximum extent permitted by law, QR Nexus and its operators shall not be liable for
+              To the maximum extent permitted by law, QRGen by Adwyzors and its operators shall not be liable for
               any direct, indirect, incidental, special, consequential, or punitive damages arising from
               your use of the service.
             </p>
@@ -80,7 +80,7 @@ export default function Terms() {
       {/* Footer */}
       <footer className="border-t border-white/5 py-6">
         <div className="max-w-[800px] mx-auto px-4 sm:px-6 flex justify-between items-center">
-          <p className="text-xs text-[#f0f0f0]/30">QR Nexus. All rights reserved.</p>
+          <p className="text-xs text-[#f0f0f0]/30">QRGen by Adwyzors. All rights reserved.</p>
           <Link to="/" className="text-xs text-[#4d6bfa] hover:underline">Back to Generator</Link>
         </div>
       </footer>
