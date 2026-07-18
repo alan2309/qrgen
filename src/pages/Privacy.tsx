@@ -71,8 +71,8 @@ export default function Privacy() {
             <h2 className="text-lg font-semibold text-[#f0f0f0] mb-3">Contact</h2>
             <p className="text-[#f0f0f0]/60 text-sm leading-relaxed">
               For privacy questions or concerns, please contact us at{' '}
-              <a href="mailto:privacy@qrgen.app" className="text-[#4d6bfa] hover:underline">
-                privacy@qrgen.app
+              <a href="adwyzorss@gmail.com" className="text-[#4d6bfa] hover:underline">
+                adwyzorss@gmail.com
               </a>
             </p>
           </section>
